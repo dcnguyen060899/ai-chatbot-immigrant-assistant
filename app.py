@@ -34,18 +34,38 @@ name = "meta-llama/Llama-2-7b-chat-hf"
 # Set auth token variable from hugging face
 auth_token = "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"
 
-@st.cache_resource
+@st.cache(allow_output_mutation=True, suppress_st_warning=True)
 def get_tokenizer_model():
-    # Create tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(name, cache_dir='/content/drive/My Drive/LLM Deployment/LLM Deployment/', use_auth_token=auth_token)
+    global model, tokenizer
 
-    # Create model
-    model = AutoModelForCausalLM.from_pretrained(name, cache_dir='/content/drive/My Drive/LLM Deployment/LLM Deployment/'
-                            , use_auth_token=auth_token, torch_dtype=torch.float16,
-                            rope_scaling={"type": "dynamic", "factor": 2}, load_in_8bit=True)
+    # Check if the model and tokenizer have already been loaded
+    if 'model' not in globals() or 'tokenizer' not in globals():
+        print("Loading model and tokenizer...")
+
+        # Define the model name and authentication token
+        name = "meta-llama/Llama-2-7b-chat-hf"
+        auth_token = "your_auth_token_here"
+
+        # Create tokenizer
+        tokenizer = AutoTokenizer.from_pretrained(name, 
+                                                  cache_dir='/content/drive/My Drive/LLM Deployment/LLM Deployment/', 
+                                                  use_auth_token=auth_token)
+
+        # Create model
+        model = AutoModelForCausalLM.from_pretrained(name, 
+                                                     cache_dir='/content/drive/My Drive/LLM Deployment/LLM Deployment/', 
+                                                     use_auth_token=auth_token, 
+                                                     torch_dtype=torch.float16,
+                                                     rope_scaling={"type": "dynamic", "factor": 2}, 
+                                                     load_in_8bit=True)
+    else:
+        print("Model and tokenizer are already loaded.")
 
     return model, tokenizer
+
+# Get the model and tokenizer
 model, tokenizer = get_tokenizer_model()
+
 
 # Initialize the SimpleInputPrompt with an empty template
 query_wrapper_prompt = SimpleInputPrompt("{query_str} [/INST]")
