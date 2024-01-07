@@ -1,0 +1,13 @@
+transformers
+langchain
+einops
+accelerate
+bitsandbytes
+scipy
+xformers
+sentencepiece
+llama-index
+llama_hub
+sentence-transformers
+pypdf
+streamlit
