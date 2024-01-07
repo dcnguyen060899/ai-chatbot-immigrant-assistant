@@ -11,3 +11,5 @@ llama_hub
 sentence-transformers
 pypdf
 streamlit
+pyngrok==4.1.1
+langdetect
