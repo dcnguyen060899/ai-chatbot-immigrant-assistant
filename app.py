@@ -113,7 +113,7 @@ service_context = ServiceContext.from_defaults(
 set_global_service_context(service_context)
 
 # Define a directory for storing uploaded files
-UPLOAD_DIRECTORY = "/content/"
+UPLOAD_DIRECTORY = "/content/ai-chatbot-immigrant-assistant"
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
