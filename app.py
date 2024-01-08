@@ -34,7 +34,7 @@ name = "meta-llama/Llama-2-7b-chat-hf"
 # Set auth token variable from hugging face
 auth_token = "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"
 
-@st.cache(allow_output_mutation=True, suppress_st_warning=True)
+@st.cache_resource(hash_funcs={AutoModelForCausalLM: id, AutoTokenizer: id})
 def get_tokenizer_model():
     global model, tokenizer
 
