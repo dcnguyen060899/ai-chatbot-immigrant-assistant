@@ -139,7 +139,7 @@ index = VectorStoreIndex.from_documents(documents)
 query_engine = index.as_query_engine(streaming=True, similarity_top_k=1)
 
 # Create centered main title
-st.title('👔 HireMind 🧩')
+st.title('👔 SettleSmart 🧩')
 
 # setup a session to hold all the old prompt
 if 'messages' not in st.session_state:
