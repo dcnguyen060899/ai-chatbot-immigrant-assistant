@@ -22,6 +22,20 @@ import pypdf
 import time
 import os
 from langdetect import detect
+import getpass
+import os
+import random
+import textwrap
+from llama_index.readers.deeplake import DeepLakeReader
+import openai
+from llama_index import VectorStoreIndex, SimpleDirectoryReader, Document
+from llama_index.vector_stores import DeepLakeVectorStore
+from llama_index.storage.storage_context import StorageContext
+import deeplake
+from llama_index.llms import OpenAI
+from llama_index.tools import QueryEngineTool, ToolMetadata
+from llama_index.agent import OpenAIAgent
+
 
 def detect_language(text):
   try:
@@ -112,58 +126,88 @@ service_context = ServiceContext.from_defaults(
 # And set the service context
 set_global_service_context(service_context)
 
-# Define a directory for storing uploaded files
+# Define a directory for storing uploaded files and initialize other components
 UPLOAD_DIRECTORY = "/content/ai-chatbot-immigrant-assistant"
-
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
 
-st.title('PDF Upload and Query Interface')
-
-# File uploader allows user to add PDF
-uploaded_file = st.file_uploader("Upload PDF", type="pdf", accept_multiple_files=True)
-upload_button = st.button('Upload')
-
-if uploaded_file and upload_button:
-  for file in uploaded_file:
-  # Save the uploaded PDF to the directory
-    with open(os.path.join(UPLOAD_DIRECTORY, file.name), "wb") as f:
-      f.write(file.getbuffer())
-    st.success("File uploaded successfully.")
-
-documents = SimpleDirectoryReader(UPLOAD_DIRECTORY).load_data()
-index = VectorStoreIndex.from_documents(documents)
-
-
-# Setup index query engine using LLM
-query_engine = index.as_query_engine(streaming=True, similarity_top_k=1)
-
-# Create centered main title
+# Create the Streamlit UI components
 st.title('👔 SettleSmart 🧩')
 
-# setup a session to hold all the old prompt
-if 'messages' not in st.session_state:
-  st.session_state.messages = []
+openai.api_key = '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'
+os.environ["ACTIVELOOP_TOKEN"] = 'eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwNTAyMTQ0MywiZXhwIjoxNzM2NjQzODI4fQ.eyJpZCI6ImRjbmd1eWVuMDYwODk5In0.jUIzxdEZQhsCffeVslM0o84NcVXUI_fzaZkQuYtH3sRDKqKuuNbCDSq_iBwNdR75Am8zfuYzjEM_eC5B-0DVgw'
 
-# print out the history message
-for message in st.session_state.messages:
-  st.chat_message(message['role']).markdown(message['content'])
+reader = DeepLakeReader()
+query_vector = [random.random() for _ in range(1536)]
+documents = reader.load_data(
+    query_vector=query_vector,
+    dataset_path="hub://dcnguyen060899/SettleMind_AIChatbotImmigrantAssistant_Dataset",
+    limit=5,
+)
 
+llm = OpenAI(temperature=0.8, model="gpt-4")
+service_context = ServiceContext.from_defaults(llm=llm)
 
-# Create a text input box for the user
-# If the user hits enter
+dataset_path = 'SettleMind_AIChatbotImmigrantAssistant_Dataset'
+vector_store = DeepLakeVectorStore(dataset_path=dataset_path, overwrite=True)
+storage_context = StorageContext.from_defaults(vector_store=vector_store)
+
+index_vector_store = VectorStoreIndex.from_documents(
+    documents, 
+    storage_context=storage_context)
+
+query_engine = index_vector_store.as_query_engine()
+
+query_engine_tools = [
+    QueryEngineTool(
+        query_engine=query_engine,
+        metadata=ToolMetadata(
+            name="consult",
+            description=(
+                "Provides information about Study Permit for international students.\
+                You are a professional international immigration consultant"
+                "Use a detailed plain text question as input to the tool."
+            ),
+        ),
+    ),
+]
+
+agent = OpenAIAgent.from_tools(tools=query_engine_tools, verbose=True)
+
+uploaded_file = st.file_uploader("Upload PDF", type="pdf", accept_multtiple_files=True)
+upload_button = st.button('Upload')
+
 prompt = st.chat_input('Input your prompt here')
 
-if prompt:
-  detected_language = detect_language(prompt)
-  st.write(f"Detected language: {detected_language}")
+# Session state for holding messages
+if 'messages' not in st.session_state:
+    st.session_state.messages = []
 
-  st.chat_message('user').markdown(prompt)
-  st.session_state.messages.append({'role': 'user', 'content': prompt})
+# Display past messages
+for message in st.session_state.messages:
+    st.chat_message(message['role']).markdown(message['content'])
 
-  response = query_engine.query(prompt)
+# Handling user input and file upload
+if prompt or (uploaded_file and upload_button):
+    if uploaded_file:
+        # Save the uploaded file(s)
+        for file in uploaded_file:
+            with open(os.path.join(UPLOAD_DIRECTORY, file.name), "wb") as f:
+                f.write(file.getbuffer())
 
-  st.chat_message('assistant').markdown(response)
-  st.session_state.messages.append(
-      {'role': 'assistant', 'content': response}
-  )
+        # Process documents and set up the query engine
+        documents = SimpleDirectoryReader(UPLOAD_DIRECTORY).load_data()
+        index = VectorStoreIndex.from_documents(documents)
+        query_engine = index.as_query_engine(streaming=True, similarity_top_k=1)
+
+        # Query using Llama 7b indexed documents
+        response = query_engine.query(prompt)
+
+    else:
+        # Directly query the OpenAI Agent
+        response = agent.query(prompt)
+
+    # Display the response and update the session state
+    st.chat_message('assistant').markdown(response)
+    st.session_state.messages.append({'role': 'user', 'content': prompt})
+    st.session_state.messages.append({'role': 'assistant', 'content': response})
