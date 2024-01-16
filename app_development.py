@@ -132,7 +132,7 @@ if not os.path.exists(UPLOAD_DIRECTORY):
 # Create the Streamlit UI components
 st.title('👔 SettleSmart 🧩')
 
-openai.api_key = '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'
+openai.api_key = ''
 os.environ["ACTIVELOOP_TOKEN"] = 'eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwNTAyMTQ0MywiZXhwIjoxNzM2NjQzODI4fQ.eyJpZCI6ImRjbmd1eWVuMDYwODk5In0.jUIzxdEZQhsCffeVslM0o84NcVXUI_fzaZkQuYtH3sRDKqKuuNbCDSq_iBwNdR75Am8zfuYzjEM_eC5B-0DVgw'
 
 reader = DeepLakeReader()
