@@ -174,10 +174,14 @@ query_engine_tools = [
 
 agent = OpenAIAgent.from_tools(tools=query_engine_tools, verbose=True)
 
-uploaded_file = st.file_uploader("Upload PDF", type="pdf", accept_multtiple_files=True)
+uploaded_file = st.file_uploader("Upload PDF", type="pdf", accept_multiple_files=True)
 upload_button = st.button('Upload')
-
-prompt = st.chat_input('Input your prompt here')
+if uploaded_file and upload_button:
+  for file in uploaded_file:
+  # Save the uploaded PDF to the directory
+    with open(os.path.join(UPLOAD_DIRECTORY, file.name), "wb") as f:
+      f.write(file.getbuffer())
+    st.success("File uploaded successfully.")
 
 # Session state for holding messages
 if 'messages' not in st.session_state:
@@ -187,10 +191,19 @@ if 'messages' not in st.session_state:
 for message in st.session_state.messages:
     st.chat_message(message['role']).markdown(message['content'])
 
+prompt = st.chat_input('Input your prompt here')
+
+# Initialize a flag in Streamlit's session state to track if files are processed
+if 'uploaded_files_processed' not in st.session_state:
+    st.session_state.uploaded_files_processed = False
+
 # Handling user input and file upload
-if prompt or (uploaded_file and upload_button):
-    if uploaded_file:
-        # Save the uploaded file(s)
+if prompt:
+    st.chat_message('user').markdown(prompt)
+    st.session_state.messages.append({'role': 'user', 'content': prompt})
+    
+    if uploaded_file and not st.session_state.uploaded_files_processed:
+        # Process the uploaded file(s)
         for file in uploaded_file:
             with open(os.path.join(UPLOAD_DIRECTORY, file.name), "wb") as f:
                 f.write(file.getbuffer())
@@ -202,6 +215,10 @@ if prompt or (uploaded_file and upload_button):
 
         # Query using Llama 7b indexed documents
         response = query_engine.query(prompt)
+        response = agent.chat(response.response)
+
+        # Mark the uploaded files as processed
+        st.session_state.uploaded_files_processed = True
 
     else:
         # Directly query the OpenAI Agent
@@ -209,5 +226,9 @@ if prompt or (uploaded_file and upload_button):
 
     # Display the response and update the session state
     st.chat_message('assistant').markdown(response)
-    st.session_state.messages.append({'role': 'user', 'content': prompt})
     st.session_state.messages.append({'role': 'assistant', 'content': response})
+
+    # Reset the upload button state
+    if upload_button:
+        st.session_state.uploaded_files_processed = False
+        st.session_state.uploaded_files_processed = False
