@@ -23,7 +23,6 @@ import time
 import os
 from langdetect import detect
 import getpass
-import os
 import random
 import textwrap
 from llama_index.readers.deeplake import DeepLakeReader
@@ -35,7 +34,6 @@ import deeplake
 from llama_index.llms import OpenAI
 from llama_index.tools import QueryEngineTool, ToolMetadata
 from llama_index.agent import OpenAIAgent
-
 
 def detect_language(text):
   try:
@@ -134,7 +132,7 @@ if not os.path.exists(UPLOAD_DIRECTORY):
 # Create the Streamlit UI components
 st.title('👔 SettleSmart 🧩')
 
-openai.api_key = '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'
+openai.api_key = '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'
 os.environ["ACTIVELOOP_TOKEN"] = 'eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwNTAyMTQ0MywiZXhwIjoxNzM2NjQzODI4fQ.eyJpZCI6ImRjbmd1eWVuMDYwODk5In0.jUIzxdEZQhsCffeVslM0o84NcVXUI_fzaZkQuYtH3sRDKqKuuNbCDSq_iBwNdR75Am8zfuYzjEM_eC5B-0DVgw'
 
 reader = DeepLakeReader()
@@ -176,6 +174,7 @@ agent = OpenAIAgent.from_tools(tools=query_engine_tools, verbose=True)
 
 uploaded_file = st.file_uploader("Upload PDF", type="pdf", accept_multiple_files=True)
 upload_button = st.button('Upload')
+
 if uploaded_file and upload_button:
   for file in uploaded_file:
   # Save the uploaded PDF to the directory
@@ -199,36 +198,46 @@ if 'uploaded_files_processed' not in st.session_state:
 
 # Handling user input and file upload
 if prompt:
-    st.chat_message('user').markdown(prompt)
-    st.session_state.messages.append({'role': 'user', 'content': prompt})
-    
     if uploaded_file and not st.session_state.uploaded_files_processed:
-        # Process the uploaded file(s)
-        for file in uploaded_file:
-            with open(os.path.join(UPLOAD_DIRECTORY, file.name), "wb") as f:
-                f.write(file.getbuffer())
+        # # Process the uploaded file(s)
+        # for file in uploaded_file:
+        #     with open(os.path.join(UPLOAD_DIRECTORY, file.name), "wb") as f:
+        #         f.write(file.getbuffer())
 
         # Process documents and set up the query engine
         documents = SimpleDirectoryReader(UPLOAD_DIRECTORY).load_data()
         index = VectorStoreIndex.from_documents(documents)
         query_engine = index.as_query_engine(streaming=True, similarity_top_k=1)
 
+        st.chat_message('user').markdown(prompt)
+        st.session_state.messages.append({'role': 'user', 'content': prompt})
+
         # Query using Llama 7b indexed documents
         response = query_engine.query(prompt)
-        response = agent.chat(response.response)
 
+        st.chat_message('assistant').markdown(response)
+        st.session_state.messages.append({'role': 'assistant', 'content': response})
+
+        # Iterate over the response generator and concatenate the data
+        response_content = ""
+        for text in response.response_gen:
+          response_content += text
+
+        response = agent.chat(response_content)
+        
         # Mark the uploaded files as processed
         st.session_state.uploaded_files_processed = True
 
     else:
         # Directly query the OpenAI Agent
+        st.chat_message('user').markdown(prompt)
+        st.session_state.messages.append({'role': 'user', 'content': prompt})
+
         response = agent.query(prompt)
 
-    # Display the response and update the session state
-    st.chat_message('assistant').markdown(response)
-    st.session_state.messages.append({'role': 'assistant', 'content': response})
+        st.chat_message('assistant').markdown(response)
+        st.session_state.messages.append({'role': 'assistant', 'content': response})
 
     # Reset the upload button state
     if upload_button:
-        st.session_state.uploaded_files_processed = False
         st.session_state.uploaded_files_processed = False
