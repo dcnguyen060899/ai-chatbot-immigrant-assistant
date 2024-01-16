@@ -44,7 +44,7 @@ def detect_language(text):
 # Define variable to hold llama2 weights namingfiner
 name = "meta-llama/Llama-2-7b-chat-hf"
 # Set auth token variable from hugging face
-auth_token = "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"
+auth_token = ""
 
 @st.cache_resource(hash_funcs={AutoModelForCausalLM: id, AutoTokenizer: id})
 def get_tokenizer_model():
@@ -133,7 +133,7 @@ if not os.path.exists(UPLOAD_DIRECTORY):
 st.title('👔 SettleSmart 🧩')
 
 openai.api_key = ''
-os.environ["ACTIVELOOP_TOKEN"] = 'eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwNTAyMTQ0MywiZXhwIjoxNzM2NjQzODI4fQ.eyJpZCI6ImRjbmd1eWVuMDYwODk5In0.jUIzxdEZQhsCffeVslM0o84NcVXUI_fzaZkQuYtH3sRDKqKuuNbCDSq_iBwNdR75Am8zfuYzjEM_eC5B-0DVgw'
+os.environ["ACTIVELOOP_TOKEN"] = ''
 
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
