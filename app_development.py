@@ -66,7 +66,7 @@ os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 # os.environ['OPENAI_API_KEY'] = st.secrets['openai_api_key']
 
 llm = OpenAI(model='gpt-3.5-turbo', temperature=.7)
-service_context = ServiceContext.from_defaults(llm=llm)
+service_context = ServiceContext.from_defaults(chunk_size=1024, llm=llm)
 
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
