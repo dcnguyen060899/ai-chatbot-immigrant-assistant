@@ -31,8 +31,9 @@ from llama_index import VectorStoreIndex, SimpleDirectoryReader, Document
 from llama_index.vector_stores import DeepLakeVectorStore
 from llama_index.storage.storage_context import StorageContext
 import deeplake
-from llama_index.llms import OpenAI
+# from llama_index.llms import OpenAI
 from llama_index.tools import FunctionTool, QueryEngineTool, ToolMetadata
+
 from llama_index.agent import OpenAIAgent
 from llama_index.embeddings import OpenAIEmbedding
 from pydantic import BaseModel
