@@ -65,7 +65,7 @@ class InformationList(BaseModel):
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 
-llm = OpenAI(language_model='gpt-4', temperature=.7)
+llm = OpenAI(api_key=st.secrets["OPENAI_API_KEY"], language_model='gpt-4', temperature=.7)
 
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
