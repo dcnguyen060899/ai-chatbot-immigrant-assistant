@@ -57,11 +57,11 @@ class InformationList(BaseModel):
     immigration_details: List[Information]
 
 # initialize open ai agent model
-openai.api_key = openai_api_key
+openai.api_key = st.secrets["openai_api_key"]
 # os.environ["ACTIVELOOP_TOKEN"] = ''
 
 # Fetching secrets
-openai_api_key = st.secrets["openai_api_key"]
+# openai_api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 # os.environ['OPENAI_API_KEY'] = st.secrets['openai_api_key']
 
