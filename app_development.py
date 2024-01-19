@@ -67,7 +67,7 @@ openai_api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 
 client = OpenAI(
-    api_key=st.secrets["openai_api_key],
+    api_key=st.secrets["openai_api_key]
 )
 llm = client.chat.completions.create(
     model="gpt-3.5-turbo",
