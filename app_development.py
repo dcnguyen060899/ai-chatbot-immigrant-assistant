@@ -63,6 +63,7 @@ class InformationList(BaseModel):
 # Fetching secrets
 openai_api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
+os.environ['OPENAI_API_KEY'] = st.secrets['openai_api_key']
 
 llm = OpenAI(language_model='gpt-4', temperature=.7)
 
