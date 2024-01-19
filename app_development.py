@@ -118,7 +118,7 @@ def immigration_assistance(nationality: str, user_input: str):
     response: The assistance information related to the user's query.
 
     Example:
-    >>> immigration_assistance("Brazilian", "How do I apply for a study permit in Canada?")
+    >>> immigration_assistance("Vietnamese", "Yêu cầu tài chính tối thiểu để đủ điều kiện xin giấy phép học tập là gì?")
     """
 
     # Define the GPT-4 model
@@ -132,6 +132,10 @@ def immigration_assistance(nationality: str, user_input: str):
     "{user_input}"
 
     The response should be tailored to the nationality and language preferences of the user. 
+    Note: if user ask in other languages other than English, response in their languages
+    Example:
+    >>> User's Input: "Tôi là người Việt. Tôi cần tư vấn nhập cư."
+    >>> Response: "Tôi có thể giúp gì bạn?"
     """
 
     # Create a function to generate response based on the user's query and nationality
