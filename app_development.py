@@ -66,9 +66,11 @@ class InformationList(BaseModel):
 openai_api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 
-llm = OpenAI(
-    api_key=st.secrets["openai_api_key"],
-    model='gpt-3.5-turbo'
+client = OpenAI(
+    api_key=st.secrets["openai_api_key],
+)
+llm = client.chat.completions.create(
+    model="gpt-3.5-turbo",
 )
 
 # llm = OpenAI(language_model='gpt-4', temperature=.7)
