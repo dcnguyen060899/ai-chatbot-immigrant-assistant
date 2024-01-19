@@ -65,7 +65,7 @@ class InformationList(BaseModel):
 openai.api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 
-ll = OpenAI(
+llm = OpenAI(
     # This is the default and can be omitted
     api_key=st.secrets["openai_api_key"], model='gpt-3.5-turbo'
 )
