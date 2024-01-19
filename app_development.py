@@ -132,7 +132,7 @@ def immigration_assistance(nationality: str, user_input: str):
     "{user_input}"
 
     The response should be tailored to the nationality and language preferences of the user. 
-    Note: if user ask in other languages other than English, response in their languages
+    Note: If user ask in other languages other than English, response in their languages
     Example:
     >>> User's Input: "Tôi là người Việt. Tôi cần tư vấn nhập cư."
     >>> Response: "Tôi có thể giúp gì bạn?"
