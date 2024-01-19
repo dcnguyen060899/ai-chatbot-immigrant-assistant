@@ -58,8 +58,8 @@ class InformationList(BaseModel):
     immigration_details: List[Information]
 
 # initialize open ai agent model
-openai.api_key = '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'
-os.environ["ACTIVELOOP_TOKEN"] = 'eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwNTAyMTQ0MywiZXhwIjoxNzM2NjQzODI4fQ.eyJpZCI6ImRjbmd1eWVuMDYwODk5In0.jUIzxdEZQhsCffeVslM0o84NcVXUI_fzaZkQuYtH3sRDKqKuuNbCDSq_iBwNdR75Am8zfuYzjEM_eC5B-0DVgw'
+openai.api_key = ''
+os.environ["ACTIVELOOP_TOKEN"] = ''
 
 llm = OpenAI(language_model='gpt-4', temperature=.7)
 
