@@ -173,7 +173,6 @@ agent = OpenAIAgent.from_tools(
         immigration_query_engine_tool,
         immigration_assistance_tool,
     ],
-  llm=llm, 
   verbose=True)
 
 # Create the Streamlit UI components
