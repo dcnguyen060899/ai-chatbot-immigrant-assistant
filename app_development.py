@@ -156,13 +156,13 @@ def immigration_assistance(nationality: str, user_input: str):
 # Tool for immigration assistance based on nationality and user query
 immigration_assistance_tool = FunctionTool.from_defaults(fn=immigration_assistance)
 
-service_context = ServiceContext.from_defaults(
-    chunk_size=1024,
-    llm=llm
-    )
+# service_context = ServiceContext.from_defaults(
+#     chunk_size=1024,
+#     llm=llm
+#     )
 
-# And set the service context
-set_global_service_context(service_context)
+# # And set the service context
+# set_global_service_context(service_context)
 
 agent = OpenAIAgent.from_tools(
   system_prompt="""You are an advanced AI trained to assist with immigration-related queries by accessing a specialized vector database. 
@@ -173,6 +173,7 @@ agent = OpenAIAgent.from_tools(
         immigration_query_engine_tool,
         immigration_assistance_tool,
     ],
+    llm=llm
   verbose=True)
 
 # Create the Streamlit UI components
