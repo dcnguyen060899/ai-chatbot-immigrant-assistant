@@ -66,6 +66,7 @@ os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 # os.environ['OPENAI_API_KEY'] = st.secrets['openai_api_key']
 
 llm = OpenAI(model='gpt-3.5-turbo', temperature=.7)
+service_context = ServiceContext.from_defaults(llm=llm)
 
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
@@ -82,7 +83,8 @@ storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
 index_vector_store = VectorStoreIndex.from_documents(
     documents, 
-    storage_context=storage_context)
+    storage_context=storage_context,
+    service_context=service_context)
 
 immigration_query_engine = index_vector_store.as_query_engine(output_cls=InformationList)
 
