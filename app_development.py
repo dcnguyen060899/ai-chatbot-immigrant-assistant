@@ -38,8 +38,8 @@ from llama_index.embeddings import OpenAIEmbedding
 from pydantic import BaseModel
 from llama_index.output_parsers import PydanticOutputParser
 from llama_index.program import MultiModalLLMCompletionProgram
-from llama_index.llms import OpenAI
 from typing import List
+from openai import OpenAI
 
 def detect_language(text):
   try:
@@ -65,7 +65,12 @@ class InformationList(BaseModel):
 openai.api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 
-llm = OpenAI(language_model='gpt-4', temperature=.7)
+ll = OpenAI(
+    # This is the default and can be omitted
+    api_key=st.secrets["openai_api_key"], model='gpt-3.5-turbo'
+)
+
+# llm = OpenAI(language_model='gpt-4', temperature=.7)
 
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
