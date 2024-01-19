@@ -61,7 +61,7 @@ class InformationList(BaseModel):
 # os.environ["ACTIVELOOP_TOKEN"] = ''
 
 # Fetching secrets
-openai_api_key = st.secrets["openai_api_key"]
+# openai_api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 os.environ['OPENAI_API_KEY'] = st.secrets['openai_api_key']
 
