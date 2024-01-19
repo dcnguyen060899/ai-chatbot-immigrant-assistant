@@ -31,16 +31,14 @@ from llama_index import VectorStoreIndex, SimpleDirectoryReader, Document
 from llama_index.vector_stores import DeepLakeVectorStore
 from llama_index.storage.storage_context import StorageContext
 import deeplake
-# from llama_index.llms import OpenAI
+from llama_index.llms import OpenAI
 from llama_index.tools import FunctionTool, QueryEngineTool, ToolMetadata
-
 from llama_index.agent import OpenAIAgent
 from llama_index.embeddings import OpenAIEmbedding
 from pydantic import BaseModel
 from llama_index.output_parsers import PydanticOutputParser
 from llama_index.program import MultiModalLLMCompletionProgram
 from typing import List
-from openai import OpenAI
 
 def detect_language(text):
   try:
@@ -66,14 +64,7 @@ class InformationList(BaseModel):
 openai_api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 
-client = OpenAI(
-    api_key=st.secrets["openai_api_key]
-)
-llm = client.chat.completions.create(
-    model="gpt-3.5-turbo",
-)
-
-# llm = OpenAI(language_model='gpt-4', temperature=.7)
+llm = OpenAI(language_model='gpt-4', temperature=.7)
 
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
