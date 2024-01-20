@@ -65,7 +65,7 @@ openai.api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 # os.environ['OPENAI_API_KEY'] = st.secrets['openai_api_key']
 
-llm = OpenAI(model='gpt-3.5-turbo', temperature=.7)
+llm = OpenAI(language_model='gpt-4', temperature=.7)
 service_context = ServiceContext.from_defaults(chunk_size=1024, llm=llm)
 
 reader = DeepLakeReader()
