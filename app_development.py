@@ -69,19 +69,13 @@ llm = OpenAI(model='gpt-3.5-turbo', temperature=.7)
 service_context = ServiceContext.from_defaults(chunk_size=1024, llm=llm)
 
 # Function to load data, with Streamlit caching
-@st.cache(allow_output_mutation=True)
-def load_data(query_vector):
-    reader = DeepLakeReader()
-    documents = reader.load_data(
+reader = DeepLakeReader()
+query_vector = [random.random() for _ in range(1536)]
+documents = reader.load_data(
     query_vector=query_vector,
     dataset_path="hub://dcnguyen060899/SettleMind_AIChatbotImmigrantAssistant_Dataset",
     limit=5,
-    )
-    return documents
-
-# Use the load_data function with the appropriate parameters
-query_vector = [random.random() for _ in range(1536)]
-documents = load_data(query_vector)
+)
 
 dataset_path = 'SettleMind_AIChatbotImmigrantAssistant_Dataset'
 vector_store = DeepLakeVectorStore(dataset_path=dataset_path, overwrite=True)
