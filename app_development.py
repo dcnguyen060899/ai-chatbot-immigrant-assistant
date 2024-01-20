@@ -77,7 +77,6 @@ documents = reader.load_data(
 )
 
 dataset_path = 'SettleMind_AIChatbotImmigrantAssistant_Dataset'
-@st.cache(allow_output_mutation=True)
 vector_store = DeepLakeVectorStore(dataset_path=dataset_path, overwrite=True)
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
