@@ -76,8 +76,8 @@ def load_data(query_vector):
     query_vector=query_vector,
     dataset_path="hub://dcnguyen060899/SettleMind_AIChatbotImmigrantAssistant_Dataset",
     limit=5,
-)
-    return ds
+    )
+    return documents
 
 # Use the load_data function with the appropriate parameters
 query_vector = [random.random() for _ in range(1536)]
