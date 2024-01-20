@@ -68,7 +68,6 @@ os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 llm = OpenAI(model='gpt-3.5-turbo', temperature=.7)
 service_context = ServiceContext.from_defaults(chunk_size=1024, llm=llm)
 
-# Function to load data, with Streamlit caching
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
 documents = reader.load_data(
