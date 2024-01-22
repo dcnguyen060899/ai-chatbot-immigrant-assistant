@@ -71,7 +71,7 @@ reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
 documents = reader.load_data(
     query_vector=query_vector,
-    dataset_path="hub://dcnguyen060899/SettleMind_Test1",
+    dataset_path="hub://dcnguyen060899/SettleMind_Test2",
     limit=5,
 )
 
