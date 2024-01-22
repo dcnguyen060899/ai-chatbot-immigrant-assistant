@@ -65,13 +65,13 @@ openai.api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 # os.environ['OPENAI_API_KEY'] = st.secrets['openai_api_key']
 
-llm = OpenAI(model='gpt-3.5-turbo', temperature=.7)
+llm = OpenAI(language_model='gpt-4', temperature=.7)
 
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
 documents = reader.load_data(
     query_vector=query_vector,
-    dataset_path="hub://dcnguyen060899/hub://dcnguyen060899/SettleMind_Test1",
+    dataset_path="hub://dcnguyen060899/SettleMind_Test1",
     limit=5,
 )
 
