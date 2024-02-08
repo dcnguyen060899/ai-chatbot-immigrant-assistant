@@ -76,14 +76,8 @@ documents = reader.load_data(
     limit=5,
 )
 
-dataset_path = 'SettleMind_Test1'
-vector_store = deeplake.load('hub://dcnguyen060899/SettleMind_Test1')
-storage_context = StorageContext.from_defaults(vector_store=vector_store)
-
-
 index_vector_store = VectorStoreIndex.from_documents(
-    documents, 
-    storage_context=storage_context)
+    documents)
 
 immigration_query_engine = index_vector_store.as_query_engine(output_cls=InformationList)
 
