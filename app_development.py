@@ -39,6 +39,7 @@ from pydantic import BaseModel
 from llama_index.output_parsers import PydanticOutputParser
 from llama_index.program import MultiModalLLMCompletionProgram
 from typing import List
+from deeplake.core.vectorstore import VectorStore
 
 def detect_language(text):
   try:
@@ -76,7 +77,7 @@ documents = reader.load_data(
 )
 
 dataset_path = 'SettleMind_Test3'
-vector_store = deeplake.load('hub://dcnguyen060899/SettleMind_Test3')
+vector_store = VectorStore(path='hub://dcnguyen060899/SettleMind_Test3')
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
 
