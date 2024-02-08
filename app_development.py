@@ -175,9 +175,7 @@ agent = OpenAIAgent.from_tools(
    When users ask questions, you will directly consult the vector database to find the most relevant and current information available.
     Your responses should be based on the data stored in this database, ensuring they are precise and tailored to the users' needs.
 
-  >>> always remember to use the immigration_query_engine_tool() function to check the up-to-date data. Don't rely too much on assistant.
-  Only when you can't find the up-to-date information from vector database after using immigration_query_engine_tool(). Then make tell the user
-  what you know as assistant.
+  >>> always remember to use the immigration_query_engine_tool() function to check the up-to-date in the vector database.
   """,
   tools=[
         immigration_query_engine_tool,
