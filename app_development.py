@@ -72,11 +72,11 @@ reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
 documents = reader.load_data(
     query_vector=query_vector,
-    dataset_path="hub://dcnguyen060899/SettleMind_Test3",
+    dataset_path="hub://dcnguyen060899/SettleMind_Test1",
     limit=5,
 )
 
-dataset_path = 'SettleMind_Test3'
+dataset_path = 'SettleMind_Test1'
 vector_store = VectorStore(path='hub://dcnguyen060899/SettleMind_Test3')
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
