@@ -76,7 +76,7 @@ documents = reader.load_data(
 )
 
 dataset_path = 'SettleMind_Test3'
-vector_store = deeplake.dataset(f"hub://dcnguyen060899/{dataset_path}", overwrite=True)
+vector_store = deeplake.load('hub://dcnguyen060899/SettleMind_Test3')
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
 
