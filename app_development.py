@@ -40,6 +40,7 @@ from llama_index.output_parsers import PydanticOutputParser
 from llama_index.program import MultiModalLLMCompletionProgram
 from typing import List
 from deeplake.core.vectorstore import VectorStore
+from llama_index.embeddings import OpenAIEmbedding
 
 def detect_language(text):
   try:
@@ -80,9 +81,13 @@ dataset_path = 'settle_mind_db'
 vector_store = DeepLakeVectorStore(dataset_path=dataset_path, overwrite=True)
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
+embed_model = OpenAIEmbedding()
+service_context = ServiceContext.from_defaults(embed_model=embed_model)
+
 index_vector_store = VectorStoreIndex.from_documents(
     documents, 
-    storage_context=storage_context)
+    storage_context=storage_context,
+    service_context=service_context)
 
 immigration_query_engine = index_vector_store.as_query_engine(output_cls=InformationList)
 
@@ -170,7 +175,7 @@ agent = OpenAIAgent.from_tools(
    When users ask questions, you will directly consult the vector database to find the most relevant and current information available.
     Your responses should be based on the data stored in this database, ensuring they are precise and tailored to the users' needs.
 
-  >>> always remembner to use the immigration_query_engine_tool() function to check the up-to-date data. Don't rely too much on assistant.
+  >>> always remember to use the immigration_query_engine_tool() function to check the up-to-date data. Don't rely too much on assistant.
   Only when you can't find the up-to-date information from vector database after using immigration_query_engine_tool(). Then make tell the user
   what you know as assistant.
   """,
