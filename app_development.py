@@ -67,7 +67,7 @@ openai.api_key = st.secrets["openai_api_key"]
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
 # os.environ['OPENAI_API_KEY'] = st.secrets['openai_api_key']
 
-llm = OpenAI(language_model='gpt-4', temperature=.7)
+llm = OpenAI(model='gpt-4', temperature=.7)
 
 reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
@@ -81,13 +81,9 @@ dataset_path = 'settle_mind_db'
 vector_store = DeepLakeVectorStore(dataset_path=dataset_path, overwrite=True)
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
-embed_model = OpenAIEmbedding()
-service_context = ServiceContext.from_defaults(embed_model=embed_model)
-
 index_vector_store = VectorStoreIndex.from_documents(
     documents, 
-    storage_context=storage_context,
-    service_context=service_context)
+    storage_context=storage_context)
 
 immigration_query_engine = index_vector_store.as_query_engine(output_cls=InformationList)
 
