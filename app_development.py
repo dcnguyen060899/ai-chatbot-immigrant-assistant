@@ -72,12 +72,17 @@ reader = DeepLakeReader()
 query_vector = [random.random() for _ in range(1536)]
 documents = reader.load_data(
     query_vector=query_vector,
-    dataset_path="hub://dcnguyen060899/SettleMind_db",
+    dataset_path="hub://dcnguyen060899/settle_mind_db",
     limit=5,
 )
 
+dataset_path = 'settle_mind_db'
+vector_store = DeepLakeVectorStore(dataset_path=dataset_path, overwrite=True)
+storage_context = StorageContext.from_defaults(vector_store=vector_store)
+
 index_vector_store = VectorStoreIndex.from_documents(
-    documents)
+    documents, 
+    storage_context=storage_context)
 
 immigration_query_engine = index_vector_store.as_query_engine(output_cls=InformationList)
 
