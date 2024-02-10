@@ -85,7 +85,7 @@ index_vector_store = VectorStoreIndex.from_documents(
     documents, 
     storage_context=storage_context)
 
-immigration_query_engine = index_vector_store.as_query_engine(output_cls=InformationList)
+immigration_query_engine = index_vector_store.as_query_engine(similarity_top_k=3, output_cls=InformationList)
 
 immigration_query_engine_tool =QueryEngineTool(
     query_engine=immigration_query_engine,
@@ -102,60 +102,60 @@ immigration_query_engine_tool =QueryEngineTool(
 )
 
 # Define a Pydantic model for the immigration response
-class ImmigrationResponse(BaseModel):
-    document_requirements: str = ""
-    application_steps: str = ""
-    cultural_tips: str = ""
-    language_support: str = ""
-    additional_info: str = ""
+# class ImmigrationResponse(BaseModel):
+#     document_requirements: str = ""
+#     application_steps: str = ""
+#     cultural_tips: str = ""
+#     language_support: str = ""
+#     additional_info: str = ""
 
-def immigration_assistance(nationality: str, user_input: str):
-    """
-    Given the nationality of a user and their specific query, this function returns relevant immigration assistance information.
-    This tool is designed to provide multilingual support for immigration-related queries, 
-    focusing on study permits, visa applications, and general immigration advice for Canada.
+# def immigration_assistance(nationality: str, user_input: str):
+#     """
+#     Given the nationality of a user and their specific query, this function returns relevant immigration assistance information.
+#     This tool is designed to provide multilingual support for immigration-related queries, 
+#     focusing on study permits, visa applications, and general immigration advice for Canada.
 
-    Parameters:
-    nationality (str): The nationality of the user or their preferred language for communication.
-    user_input (str): The specific query or request from the user.
+#     Parameters:
+#     nationality (str): The nationality of the user or their preferred language for communication.
+#     user_input (str): The specific query or request from the user.
 
-    Returns:
-    response: The assistance information related to the user's query.
+#     Returns:
+#     response: The assistance information related to the user's query.
 
-    Example:
-    >>> immigration_assistance("Vietnamese", "Yêu cầu tài chính tối thiểu để đủ điều kiện xin giấy phép học tập là gì?")
-    """
+#     Example:
+#     >>> immigration_assistance("Vietnamese", "Yêu cầu tài chính tối thiểu để đủ điều kiện xin giấy phép học tập là gì?")
+#     """
 
-    # Define the GPT-4 model
-    gpt4_language_model = OpenAI(language_model="gpt-4")
+#     # Define the GPT-4 model
+#     gpt4_language_model = OpenAI(language_model="gpt-4")
 
-    # Define prompt template based on nationality and user query
-    prompt_template_str = f"""
-    You are an expert in Canadian immigration policies and fluent in multiple languages, including the language preferred by someone from {nationality}.
-    Provide detailed information in a clear and user-friendly manner about the following query:
+#     # Define prompt template based on nationality and user query
+#     prompt_template_str = f"""
+#     You are an expert in Canadian immigration policies and fluent in multiple languages, including the language preferred by someone from {nationality}.
+#     Provide detailed information in a clear and user-friendly manner about the following query:
 
-    "{user_input}"
+#     "{user_input}"
 
-    The response should be tailored to the nationality and language preferences of the user. 
-    Note: If user ask in other languages other than English, response in their languages
-    Example:
-    >>> User's Input: "Tôi là người Việt. Tôi cần tư vấn nhập cư."
-    >>> Response: "Tôi có thể giúp gì bạn?"
-    """
+#     The response should be tailored to the nationality and language preferences of the user. 
+#     Note: If user ask in other languages other than English, response in their languages
+#     Example:
+#     >>> User's Input: "Tôi là người Việt. Tôi cần tư vấn nhập cư."
+#     >>> Response: "Tôi có thể giúp gì bạn?"
+#     """
 
-    # Create a function to generate response based on the user's query and nationality
-    translation_completion_program = MultiModalLLMCompletionProgram.from_defaults(
-        output_parser=PydanticOutputParser(ImmigrationResponse),
-        prompt_template_str=prompt_template_str,
-        llm=gpt4_language_model,
-        verbose=True,
-    )
-    response = translation_completion_program()
+#     # Create a function to generate response based on the user's query and nationality
+#     translation_completion_program = MultiModalLLMCompletionProgram.from_defaults(
+#         output_parser=PydanticOutputParser(ImmigrationResponse),
+#         prompt_template_str=prompt_template_str,
+#         llm=gpt4_language_model,
+#         verbose=True,
+#     )
+#     response = translation_completion_program()
     
-    return response
+#     return response
 
-# Tool for immigration assistance based on nationality and user query
-immigration_assistance_tool = FunctionTool.from_defaults(fn=immigration_assistance)
+# # Tool for immigration assistance based on nationality and user query
+# immigration_assistance_tool = FunctionTool.from_defaults(fn=immigration_assistance)
 
 # service_context = ServiceContext.from_defaults(
 #     chunk_size=1024,
@@ -174,8 +174,7 @@ agent = OpenAIAgent.from_tools(
   >>> always remember to use the immigration_query_engine_tool() function to check the up-to-date in the vector database.
   """,
   tools=[
-        immigration_query_engine_tool,
-        immigration_assistance_tool,
+        immigration_query_engine_tool
     ],
     llm=llm,
   verbose=True)
