@@ -4,7 +4,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, TextStreamer
 # Import torch for datatype attributes
 import torch
 
-from llama_index.core import ServiceContext
+from llama_index.core import service_context
 
 # Import deps to load documents
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
