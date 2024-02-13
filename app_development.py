@@ -5,48 +5,37 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, TextStreamer
 # Import torch for datatype attributes
 import torch
 # Import the prompt wrapper...but for llama index
-from llama_index.prompts.prompts import SimpleInputPrompt
 # Import the llama index HF Wrapper
-from llama_index.llms import HuggingFaceLLM
 # Bring in embeddings wrapper
-from llama_index.embeddings import LangchainEmbedding
 # Bring in HF embeddings - need these to represent document chunks
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 # Bring in stuff to change service context
-from llama_index import set_global_service_context
-from llama_index import ServiceContext
+from llama_index.core import set_global_service_context
+from llama_inde.corex import ServiceContext
 # Import deps to load documents
-from llama_index import VectorStoreIndex, SimpleDirectoryReader
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 from pathlib import Path
 import pypdf
 import time
 import os
-from langdetect import detect
 import getpass
 import random
 import textwrap
-from llama_index.readers.deeplake import DeepLakeReader
+from llama_index.legacy.readers.deeplake import DeepLakeReader
 import openai
-from llama_index import VectorStoreIndex, SimpleDirectoryReader, Document
-from llama_index.vector_stores import DeepLakeVectorStore
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Document
+from llama_index.legacy.vector_stores import DeepLakeVectorStore
 from llama_index.storage.storage_context import StorageContext
 import deeplake
-from llama_index.llms import OpenAI
-from llama_index.tools import FunctionTool, QueryEngineTool, ToolMetadata
-from llama_index.agent import OpenAIAgent
-from llama_index.embeddings import OpenAIEmbedding
+from llama_index.llms.openai import OpenAI
+from llama_index.core.tools import FunctionTool, QueryEngineTool, ToolMetadata
+from llama_index.agent.openai import OpenAIAgent
+from llama_index.core.embeddings import OpenAIEmbedding
 from pydantic import BaseModel
-from llama_index.output_parsers import PydanticOutputParser
-from llama_index.program import MultiModalLLMCompletionProgram
+from llama_index.core.output_parsers import PydanticOutputParser
+from llama_index.core.program import MultiModalLLMCompletionProgram
 from typing import List
 from deeplake.core.vectorstore import VectorStore
-from llama_index.embeddings import OpenAIEmbedding
-
-def detect_language(text):
-  try:
-    return detect(text)
-  except:
-    return "unknown"
+from llama_index.embeddings.openai import OpenAIEmbedding
 
 class Information(BaseModel):
     """Data model for immigration related information"""
