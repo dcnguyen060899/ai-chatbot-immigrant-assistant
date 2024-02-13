@@ -1,14 +1,9 @@
 import streamlit as st
 
-# Import transformer classes for generaiton
 from transformers import AutoTokenizer, AutoModelForCausalLM, TextStreamer
 # Import torch for datatype attributes
 import torch
-# Import the prompt wrapper...but for llama index
-# Import the llama index HF Wrapper
-# Bring in embeddings wrapper
-# Bring in HF embeddings - need these to represent document chunks
-# Bring in stuff to change service context
+
 from llama_index.core import set_global_service_context
 from llama_inde.corex import ServiceContext
 # Import deps to load documents
