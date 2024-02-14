@@ -17,7 +17,7 @@ from llama_index.legacy.readers.deeplake import DeepLakeReader
 import openai
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Document
 from llama_index.legacy.vector_stores import DeepLakeVectorStore
-from llama_index.storage.storage_context import StorageContext
+from llama_index.core.storage.storage_context import StorageContext
 import deeplake
 from llama_index.llms.openai import OpenAI
 from llama_index.core.tools import FunctionTool, QueryEngineTool, ToolMetadata
