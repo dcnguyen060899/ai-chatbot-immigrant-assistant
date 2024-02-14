@@ -27,7 +27,6 @@ from pydantic import BaseModel
 from llama_index.core.output_parsers import PydanticOutputParser
 from llama_index.core.program import MultiModalLLMCompletionProgram
 from typing import List
-from deeplake.core.vectorstore import VectorStore
 from llama_index.embeddings.openai import OpenAIEmbedding
 
 class Information(BaseModel):
