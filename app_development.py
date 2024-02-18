@@ -28,6 +28,7 @@ from llama_index.core.output_parsers import PydanticOutputParser
 from llama_index.core.program import MultiModalLLMCompletionProgram
 from typing import List
 from llama_index.embeddings.openai import OpenAIEmbedding
+import nltk
 
 class Information(BaseModel):
     """Data model for immigration related information"""
