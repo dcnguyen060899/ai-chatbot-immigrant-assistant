@@ -10,3 +10,4 @@ pyngrok==4.1.1
 langdetect
 deeplake
 openai
+nltk
